@@ -1,21 +1,13 @@
 import { registerSettings } from './module/Settings'
 import { WebLatency } from './module/WebLatency'
-import { REG_NAME } from './constants'
+import { SETTINGS_CHANGED_HOOK } from './constants'
 
-Hooks.once('init', async function () {
-  console.log(`${REG_NAME} | Initializing ${REG_NAME}`)
-
+Hooks.once('init', () => {
   registerSettings()
-
-  console.log(`${REG_NAME} | Init finished`)
 })
 
-Hooks.once('ready', function () {
-  console.log(`${REG_NAME} | Is Ready`)
-
+Hooks.once('ready', () => {
   const webLatency = new WebLatency()
-
-  setTimeout(() => {
-    webLatency.monitorLatency()
-  }, 10000)
+  webLatency.start()
+  Hooks.on(SETTINGS_CHANGED_HOOK, () => webLatency.restart())
 })

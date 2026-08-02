@@ -1,0 +1,67 @@
+{
+  "id": "user-latency",
+  "title": "Latência dos Usuários",
+  "description": "Exibe a latência média dos usuários na lista de jogadores do Foundry VTT.",
+  "version": "2.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "mawburn",
+      "email": "mawburn7@gmail.com",
+      "url": "https://github.com/mawburn"
+    },
+    {
+      "name": "SoftMissT",
+      "url": "https://github.com/SoftMissT"
+    }
+  ],
+  "esmodules": [
+    "index.js"
+  ],
+  "styles": [
+    "index.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    },
+    {
+      "lang": "zh-CH",
+      "name": "简体中文",
+      "path": "lang/zh-CH.json"
+    },
+    {
+      "lang": "zh-TW",
+      "name": "正體中文",
+      "path": "lang/zh-TW.json"
+    }
+  ],
+  "socket": true,
+  "url": "https://github.com/SoftMissT/foundry-user-latency-br",
+  "manifest": "https://raw.githubusercontent.com/SoftMissT/foundry-user-latency-br/main/module.json",
+  "download": "https://github.com/SoftMissT/foundry-user-latency-br/releases/download/v2.1.0/module.zip",
+  "license": "https://github.com/SoftMissT/foundry-user-latency-br/blob/main/LICENSE",
+  "readme": "https://github.com/SoftMissT/foundry-user-latency-br/blob/main/README.md",
+  "bugs": "https://github.com/SoftMissT/foundry-user-latency-br/issues",
+  "changelog": "https://github.com/SoftMissT/foundry-user-latency-br/releases"
+}

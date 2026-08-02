@@ -1,4 +1,6 @@
-import { MODULE_NAME } from '../constants'
+import { MODULE_NAME, SETTINGS_CHANGED_HOOK } from '../constants'
+
+const notifySettingsChanged = () => Hooks.callAll(SETTINGS_CHANGED_HOOK)
 
 export const registerSettings = () => {
   const gameInstance = game as Game
@@ -16,6 +18,7 @@ export const registerSettings = () => {
     default: 30,
     scope: 'world',
     config: true,
+    onChange: notifySettingsChanged,
   })
 
   gameInstance.settings.register(MODULE_NAME, 'hideLatency', {
@@ -24,6 +27,7 @@ export const registerSettings = () => {
     default: false,
     scope: 'world',
     config: true,
+    onChange: notifySettingsChanged,
   })
 
   gameInstance.settings.register(MODULE_NAME, 'microLatency', {
@@ -32,5 +36,6 @@ export const registerSettings = () => {
     default: false,
     scope: 'world',
     config: true,
+    onChange: notifySettingsChanged,
   })
 }

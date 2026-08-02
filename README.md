@@ -1,27 +1,51 @@
-# Unmaintained, please direct all requests to the ticket on Foundry's repo below
+# Latência dos Usuários
 
-I do not really use Foundry anymore and was really just holding this until it was implemented into Foundry natively. It's a very low effort feature that is important to users and there is realistically no reason it's not already a native feature.
+> Fork brasileiro do User Latency, compatível com Foundry VTT v13 e verificado para v14.
 
-I have created a ticket on the Foundry Repo, which you can find here: https://github.com/foundryvtt/foundryvtt/issues/11132
-
-The more tracking that post gets, the more likely it will be added.
+O módulo exibe a latência média de cada usuário ao lado do nome na lista de jogadores. No Foundry VTT v14, ele reutiliza a medição nativa de latência e compartilha somente o valor necessário entre os clientes conectados.
 
 <p align="center">
-  <img src="./fish.gif" alt="So long and thanks for all the fish" width="310" height="175" />
+  <img src="https://i.imgur.com/bytsMWS.png" alt="Latência exibida na lista de jogadores do Foundry VTT" />
 </p>
 
-## Foundry User Latency
+## Instalação
 
-Shows an average of a players latency in the player window.
+Cole o endereço abaixo em **Instalar módulo** no Foundry VTT:
 
-<p align="center">
-  <img src="https://i.imgur.com/bytsMWS.png" alt="FoundryVTT Latency" />
-</p>
+```text
+https://raw.githubusercontent.com/SoftMissT/foundry-user-latency-br/main/module.json
+```
 
-Foundry Link:
+Depois, ative **Latência dos Usuários** nas configurações de módulos do seu mundo.
 
-https://foundryvtt.com/packages/user-latency
+## Configurações
 
-Foundry Hub:
+Em **Configurações do jogo → Configurar ajustes → Configurações de módulo**, o Mestre pode:
 
-https://www.foundryvtt-hub.com/package/user-latency/
+- definir o intervalo de atualização entre 10 e 90 segundos;
+- ocultar completamente os valores;
+- mostrar apenas indicadores coloridos em vez dos números.
+
+## Compatibilidade
+
+- Foundry VTT mínimo: v13
+- Foundry VTT verificado: v14
+- Sistemas de jogo: independente de sistema
+
+## Desenvolvimento
+
+```bash
+npm install
+npm test
+npm run package
+```
+
+O comando `npm run package` cria `module.zip` com `module.json` diretamente na raiz do pacote.
+
+## Créditos
+
+Projeto original criado por [mawburn](https://github.com/mawburn/foundry-user-latency). Este fork é mantido por [SoftMissT](https://github.com/SoftMissT) para compatibilidade com as versões atuais do Foundry VTT e localização em português brasileiro.
+
+O projeto original foi arquivado enquanto a funcionalidade era discutida para integração ao núcleo do Foundry VTT: [foundryvtt/foundryvtt#11132](https://github.com/foundryvtt/foundryvtt/issues/11132).
+
+Distribuído sob a licença [GNU AGPL v3](LICENSE).

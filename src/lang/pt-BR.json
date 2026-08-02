@@ -1,0 +1,8 @@
+{
+  "I18N.LANGUAGE": "Português (Brasil)",
+  "I18N.MAINTAINERS": "SoftMissT",
+  "USERLATENCY.Interval": "Intervalo de atualização da latência",
+  "USERLATENCY.IntervalHint": "Tempo, em segundos, entre as atualizações. O mínimo é 10 segundos; entre 20 e 40 segundos costuma ser suficiente.",
+  "USERLATENCY.Hide": "Ocultar completamente a latência",
+  "USERLATENCY.Micro": "Mostrar apenas indicadores em vez de números"
+}

@@ -7,66 +7,42 @@ export interface Pong {
 }
 
 export class WebLatency {
-  private static readonly HISTORY_SIZE = 10
   private static readonly MIN_INTERVAL_SECONDS = 10
-  private intervalSeconds: number
+  private intervalId: number | undefined
+  private readonly playerList = new PlayerList()
 
-  private latencyArr: number[] = []
-  private playerList: PlayerList
-
-  constructor() {
-    this.playerList = new PlayerList()
+  start = () => {
     this.playerList.registerListeners()
-    this.monitorLatency()
-    this.intervalSeconds = 30
+    this.restart()
   }
 
-  measureLatency = async () => {
-    await this.performLatencyMeasurement()
+  stop = () => {
+    if (this.intervalId === undefined) return
+    window.clearInterval(this.intervalId)
+    this.intervalId = undefined
   }
 
-  monitorLatency = async () => {
-    while (true) {
-      this.setIntervalSetting()
-      await this.sleep()
-      await this.performLatencyMeasurement()
-    }
+  restart = () => {
+    this.stop()
+    this.publishLatency()
+    this.intervalId = window.setInterval(this.publishLatency, this.getIntervalMilliseconds())
   }
 
-  setIntervalSetting = () => {
+  private getIntervalMilliseconds = () => {
     const interval = (game as Game).settings.get(MODULE_NAME, 'latencyInterval') as number
-    const currentInterval = interval ?? this.intervalSeconds
-    this.intervalSeconds = Math.max(currentInterval, WebLatency.MIN_INTERVAL_SECONDS) * 1000
+    return Math.max(interval ?? 30, WebLatency.MIN_INTERVAL_SECONDS) * 1000
   }
 
-  private sleep = () => new Promise(res => setTimeout(res, this.intervalSeconds))
-
-  private performLatencyMeasurement = async () => {
-    try {
-      const gameInstance = game as Game
-      if (!gameInstance.socket?.connected || !gameInstance?.user?.id) return
-
-      const startTime = Date.now()
-      await gameInstance.time.sync()
-      const delta = Date.now() - startTime
-
-      this.latencyArr.push(delta)
-      this.sendPong(gameInstance.user.id, this.computeAverage())
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  private computeAverage = () => {
-    const recentLatencies = this.latencyArr.slice(-WebLatency.HISTORY_SIZE)
-    const total = recentLatencies.reduce((a, b) => a + b, 0)
-    return Math.round(total / recentLatencies.length)
-  }
-
-  private sendPong = (userId: string, average: number) => {
+  private publishLatency = () => {
     const gameInstance = game as Game
+    const userId = gameInstance.user?.id
+    const averageLatency = (gameInstance.time as typeof gameInstance.time & {
+      averageLatency?: number
+    }).averageLatency
 
-    const pong: Pong = { userId, average }
+    if (!gameInstance.socket?.connected || !userId || !Number.isFinite(averageLatency)) return
+
+    const pong: Pong = { userId, average: Math.max(0, Math.round(averageLatency ?? 0)) }
     gameInstance.socket?.emit(`module.${MODULE_NAME}`, pong)
     this.playerList.updateSelf(pong)
   }
