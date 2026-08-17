@@ -16,6 +16,7 @@ test('uses Foundry v14 lifecycle and native latency measurement', () => {
 test('updates the ApplicationV2 Players list safely', () => {
   assert.match(players, /Hooks\.on\('renderPlayers'/)
   assert.match(players, /textContent/)
+  assert.match(players, /aria-label/)
   assert.doesNotMatch(players, /innerHTML/)
 })
 
