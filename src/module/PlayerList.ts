@@ -45,10 +45,8 @@ export class PlayerList {
 
     if (!elm) return
 
-    elm.className = ''
-
     if (playerLatency === undefined || hideLatency) {
-      elm.classList.add(styles.userSpanHidden)
+      elm.className = styles.userSpanHidden
       return
     }
 
@@ -56,20 +54,28 @@ export class PlayerList {
     const microLatency = gameInstance.settings.get(MODULE_NAME, 'microLatency')
 
     if (microLatency) {
+      // Batch class updates to prevent multiple DOM recalculations
+      elm.className = `${styles.microLatency} ${level}`
       elm.textContent = level === styles.userSpanGood ? '+' : level === styles.userSpanLow ? '•' : '−'
       elm.title = `${playerLatency}ms`
-      elm.classList.remove(styles.userSpan)
-      elm.classList.add(styles.microLatency)
     } else {
-      elm.classList.remove(styles.microLatency)
-      elm.classList.add(styles.userSpan)
-      elm.textContent = `${playerLatency}`
-      const unit = document.createElement('em')
-      unit.textContent = 'ms'
-      elm.append(unit)
-    }
+      // Batch class updates to prevent multiple DOM recalculations
+      elm.className = `${styles.userSpan} ${level}`
+      elm.removeAttribute('title')
 
-    elm.classList.add(level)
+      // Optimization: reuse existing Text and <em> nodes to avoid garbage collection
+      // overhead from document.createElement('em') on every latency update cycle.
+      const textNode = elm.firstChild
+      const unit = elm.querySelector('em')
+      if (textNode && textNode.nodeType === Node.TEXT_NODE && unit) {
+        textNode.nodeValue = `${playerLatency}`
+      } else {
+        elm.textContent = `${playerLatency}`
+        const newUnit = document.createElement('em')
+        newUnit.textContent = 'ms'
+        elm.append(newUnit)
+      }
+    }
   }
 
   getLatencyLevel = (playerLatency: number) => {
@@ -83,14 +89,14 @@ export class PlayerList {
 
     if (!players) return null
 
-    const span = document.createElement('span')
-    span.id = this.getId(playerId)
-
     const playerElm = players.querySelector(`li[data-user-id="${playerId}"] .player-name`)
 
-    if (playerElm) {
-      playerElm.insertAdjacentElement('afterend', span)
-    }
+    // Don't create orphaned HTML elements if the target player element doesn't exist
+    if (!playerElm) return null
+
+    const span = document.createElement('span')
+    span.id = this.getId(playerId)
+    playerElm.insertAdjacentElement('afterend', span)
 
     return span
   }

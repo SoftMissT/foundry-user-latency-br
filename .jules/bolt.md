@@ -1,0 +1,3 @@
+## 2025-05-18 - DOM Node Reuse and Batching in Foundry VTT Modules
+**Learning:** High-frequency DOM updates (such as periodic latency rendering) trigger unnecessary garbage collection and style recalculations if `document.createElement` or `classList.add`/`remove` chains are called repeatedly on every tick. Reusing existing Text and `<em>` child nodes directly inside existing `<span>` tags reduces GC pressure during active gaming sessions.
+**Action:** When updating DOM elements periodically in Foundry VTT modules, check for existing child nodes before creating new ones and batch class updates into single `className` assignments.
