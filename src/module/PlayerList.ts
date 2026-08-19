@@ -61,12 +61,17 @@ export class PlayerList {
       elm.classList.remove(styles.userSpan)
       elm.classList.add(styles.microLatency)
     } else {
+      elm.removeAttribute('title')
       elm.classList.remove(styles.microLatency)
       elm.classList.add(styles.userSpan)
-      elm.textContent = `${playerLatency}`
-      const unit = document.createElement('em')
-      unit.textContent = 'ms'
-      elm.append(unit)
+
+      // ⚡ Optimization: Reuse existing <em> node to avoid DOM element creation & GC on every latency update
+      let unit = elm.querySelector('em')
+      if (!unit) {
+        unit = document.createElement('em')
+        unit.textContent = 'ms'
+      }
+      elm.replaceChildren(`${playerLatency}`, unit)
     }
 
     elm.classList.add(level)
