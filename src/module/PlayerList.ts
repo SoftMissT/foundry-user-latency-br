@@ -49,8 +49,11 @@ export class PlayerList {
 
     if (playerLatency === undefined || hideLatency) {
       elm.classList.add(styles.userSpanHidden)
+      elm.setAttribute('aria-hidden', 'true')
       return
     }
+
+    elm.removeAttribute('aria-hidden')
 
     const level = this.getLatencyLevel(playerLatency)
     const microLatency = gameInstance.settings.get(MODULE_NAME, 'microLatency')
@@ -58,10 +61,12 @@ export class PlayerList {
     if (microLatency) {
       elm.textContent = level === styles.userSpanGood ? '+' : level === styles.userSpanLow ? '•' : '−'
       elm.title = `${playerLatency}ms`
+      elm.setAttribute('aria-label', `${playerLatency}ms`)
       elm.classList.remove(styles.userSpan)
       elm.classList.add(styles.microLatency)
     } else {
       elm.removeAttribute('title')
+      elm.removeAttribute('aria-label')
       elm.classList.remove(styles.microLatency)
       elm.classList.add(styles.userSpan)
 
