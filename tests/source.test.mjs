@@ -17,6 +17,8 @@ test('updates the ApplicationV2 Players list safely', () => {
   assert.match(players, /Hooks\.on\('renderPlayers'/)
   assert.match(players, /textContent/)
   assert.doesNotMatch(players, /innerHTML/)
+  assert.match(players, /aria-label/)
+  assert.match(players, /aria-hidden/)
 })
 
 test('production source has no console logging', () => {
