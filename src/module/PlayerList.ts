@@ -19,6 +19,17 @@ export class PlayerList {
     this.listenersRegistered = true
 
     game.socket?.on(`module.${MODULE_NAME}`, (data: Pong) => {
+      // 🛡️ Security: Validate incoming network payload from untrusted websocket peers
+      if (
+        !data ||
+        typeof data !== 'object' ||
+        typeof data.userId !== 'string' ||
+        typeof data.average !== 'number' ||
+        !Number.isFinite(data.average)
+      ) {
+        return
+      }
+
       this.playerLatencyTimes[data.userId] = data.average
       this.updateLatencyText(data.userId)
     })
@@ -96,7 +107,9 @@ export class PlayerList {
     const span = document.createElement('span')
     span.id = this.getId(playerId)
 
-    const playerElm = players.querySelector(`li[data-user-id="${playerId}"] .player-name`)
+    // 🛡️ Security: Use CSS.escape to prevent selector injection via playerId
+    const safePlayerId = CSS.escape(playerId)
+    const playerElm = players.querySelector(`li[data-user-id="${safePlayerId}"] .player-name`)
 
     if (playerElm) {
       playerElm.insertAdjacentElement('afterend', span)
