@@ -93,14 +93,14 @@ export class PlayerList {
 
     if (!players) return null
 
-    const span = document.createElement('span')
-    span.id = this.getId(playerId)
-
     const playerElm = players.querySelector(`li[data-user-id="${playerId}"] .player-name`)
 
-    if (playerElm) {
-      playerElm.insertAdjacentElement('afterend', span)
-    }
+    // ⚡ Optimization: Return early if player element is not in DOM to avoid creating orphan elements & unnecessary DOM operations
+    if (!playerElm) return null
+
+    const span = document.createElement('span')
+    span.id = this.getId(playerId)
+    playerElm.insertAdjacentElement('afterend', span)
 
     return span
   }
